@@ -105,7 +105,7 @@ Backup any existing configuration and copy the `nvim` folder into your config di
 [ -d ~/.config/nvim ] && mv ~/.config/nvim ~/.config/nvim.backup.$(date +%s)
 
 # Clone this repository and link the config
-git clone https://github.com/0x3xp/neodev.git ~/neodev
+git clone https://github.com/YOUR_USERNAME/neodev.git ~/neodev
 cp -r ~/neodev/nvim ~/.config/nvim
 ```
 

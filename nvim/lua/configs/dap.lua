@@ -42,52 +42,76 @@ dapui.setup({
   },
 })
 
--- Automatically open/close DAP UI when debugging starts/ends
+-- Open DAP UI automatically when session initializes
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+
+-- Inform user on exit without abruptly destroying the UI layout
+dap.listeners.after.event_terminated["dapui_config"] = function()
+  vim.notify("Debugging finished. Press <leader>du or <leader>dx to close UI.", vim.log.levels.INFO)
 end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+
+dap.listeners.after.event_exited["dapui_config"] = function(_, body)
+  local code = (body and body.exitCode) or 0
+  vim.notify(string.format("Process exited with code %s. Press <leader>du to toggle UI.", code), vim.log.levels.INFO)
 end
 
 -- Configure GDB as the Debug Adapter (native to Linux / Kali)
 dap.adapters.gdb = {
   type = "executable",
   command = "gdb",
-  args = { "-i", "dap" },
+  args = { "-q", "-i", "dap" },
 }
+
+-- Prompt helpers
+local function get_program()
+  local p = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+  if p == nil or p == "" then
+    return nil
+  end
+  return vim.fn.expand(p)
+end
+
+local function get_args()
+  local args_str = vim.fn.input("Arguments: ")
+  if args_str == nil or args_str:match("^%s*$") then
+    return {}
+  end
+  return vim.split(args_str, "%s+")
+end
 
 -- Configurations for C, C++, Rust, and Assembly
 local gdb_configurations = {
   {
-    name = "Launch binary (GDB)",
+    name = "Launch & Stop at entry point (_start / starti)",
     type = "gdb",
     request = "launch",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
-    args = function()
-      local args_string = vim.fn.input("Arguments: ")
-      return vim.split(args_string, " +")
-    end,
+    program = get_program,
+    args = get_args,
     cwd = "${workspaceFolder}",
-    stopAtBeginningOfMainSubprogram = false,
+    stopOnEntry = true, -- Runs starti; stops at the very first instruction (perfect for ASM, shellcode, and C)
   },
   {
-    name = "Launch binary & Stop at main (GDB)",
+    name = "Launch & Run to breakpoint (GDB run)",
     type = "gdb",
     request = "launch",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
+    program = get_program,
+    args = get_args,
+    cwd = "${workspaceFolder}",
+    stopOnEntry = false,
+  },
+  {
+    name = "Launch & Stop at main (GDB start)",
+    type = "gdb",
+    request = "launch",
+    program = get_program,
+    args = get_args,
     cwd = "${workspaceFolder}",
     stopAtBeginningOfMainSubprogram = true,
   },
   {
-    name = "Attach to process (GDB)",
+    name = "Attach to process (GDB attach)",
     type = "gdb",
     request = "attach",
     pid = function()
@@ -110,6 +134,7 @@ dap.configurations.c = gdb_configurations
 dap.configurations.cpp = gdb_configurations
 dap.configurations.rust = gdb_configurations
 dap.configurations.asm = gdb_configurations
+dap.configurations.nasm = gdb_configurations
 
 -- Breakpoint icons & visual styling
 vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#F07178" })
