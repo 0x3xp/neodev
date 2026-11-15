@@ -11,6 +11,10 @@ return {
     },
   },
 
+  rocks = {
+    enabled = false,
+  },
+
   performance = {
     rtp = {
       disabled_plugins = {
@@ -35,12 +39,10 @@ return {
         "zipPlugin",
         "tutor",
         "rplugin",
-        "syntax",
         "synmenu",
         "optwin",
         "compiler",
         "bugreport",
-        "ftplugin",
       },
     },
   },

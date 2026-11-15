@@ -87,7 +87,7 @@ Verify the font is installed:
 fc-list : family | grep -i "JetBrainsMono Nerd Font"
 ```
 
-Configure your terminal emulator (e.g. Alacritty, Kitty, WezTerm, QTerminal) to use `JetBrainsMono Nerd Font`.
+Configure your terminal emulator (e.g. Alacritty, Kitty, WezTerm, QTerminal) to use `JetBrainsMono Nerd Font Mono` (the `Mono` variant ensures all devicons and statusline glyphs fit strictly into a single character cell without being sliced in half).
 
 ---
 

@@ -117,5 +117,5 @@ Works seamlessly on **C**, **C++**, **Rust**, and **Assembly** binaries!
 ## 🎨 7. Theme & Appearance
 
 - **Theme**: Ayu Dark (`ayu_dark`) configured in `lua/chadrc.lua`
-- **Font**: JetBrainsMono Nerd Font configured in `~/.config/qterminal.org/qterminal.ini` and `lua/options.lua`
+- **Font**: JetBrainsMono Nerd Font Mono configured in `~/.config/qterminal.org/qterminal.ini` and `lua/options.lua`
 - **Switch Themes Instantly**: Press `<leader>th` and choose from over 60+ pre-baked themes!

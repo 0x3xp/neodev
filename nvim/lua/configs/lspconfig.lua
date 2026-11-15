@@ -1,4 +1,7 @@
+local lspconfig = require "lspconfig"
 local nvlsp = require "nvchad.configs.lspconfig"
+
+-- Load NvChad base LSP defaults (capabilities, diagnostic styling, lua_ls, on_init, on_attach)
 nvlsp.defaults()
 
 -- Global/Buffer LSP keymaps helper
@@ -68,9 +71,8 @@ vim.lsp.config("rust_analyzer", {
           enable = true,
         },
       },
-      checkOnSave = true,
       check = {
-        command = "clippy",
+        command = "check",
         features = "all",
       },
       procMacro = {
@@ -97,3 +99,6 @@ vim.lsp.config("asm_lsp", {
 -- Enable all desired LSP servers
 local servers = { "clangd", "rust_analyzer", "asm_lsp", "html", "cssls" }
 vim.lsp.enable(servers)
+
+-- Provide :LspInfo alias to :checkhealth vim.lsp
+vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Check LSP status and active clients" })

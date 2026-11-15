@@ -40,30 +40,45 @@ end, { desc = "Toggle Hex dump mode (xxd)" })
 -------------------------------------------------------------------------------
 -- Debugger (DAP) Keybindings for C, C++, Rust, ASM
 -------------------------------------------------------------------------------
-local dap_ok, dap = pcall(require, "dap")
-local dapui_ok, dapui = pcall(require, "dapui")
+map("n", "<F5>", function()
+  require("dap").continue()
+end, { desc = "Debug: Start / Continue" })
 
-if dap_ok then
-  map("n", "<F5>", dap.continue, { desc = "Debug: Start / Continue" })
-  map("n", "<F10>", dap.step_over, { desc = "Debug: Step Over" })
-  map("n", "<F11>", dap.step_into, { desc = "Debug: Step Into" })
-  map("n", "<F12>", dap.step_out, { desc = "Debug: Step Out" })
+map("n", "<F10>", function()
+  require("dap").step_over()
+end, { desc = "Debug: Step Over" })
 
-  map("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
-  map("n", "<leader>dB", function()
-    dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-  end, { desc = "Debug: Set Conditional Breakpoint" })
+map("n", "<F11>", function()
+  require("dap").step_into()
+end, { desc = "Debug: Step Into" })
 
-  map("n", "<leader>dr", dap.repl.open, { desc = "Debug: Open REPL" })
-  map("n", "<leader>dl", dap.run_last, { desc = "Debug: Run Last" })
-  map("n", "<leader>dx", function()
-    dap.terminate()
-    if dapui_ok then
-      dapui.close()
-    end
-  end, { desc = "Debug: Terminate session" })
+map("n", "<F12>", function()
+  require("dap").step_out()
+end, { desc = "Debug: Step Out" })
 
-  if dapui_ok then
-    map("n", "<leader>du", dapui.toggle, { desc = "Debug: Toggle DAP UI" })
-  end
-end
+map("n", "<leader>db", function()
+  require("dap").toggle_breakpoint()
+end, { desc = "Debug: Toggle Breakpoint" })
+
+map("n", "<leader>dB", function()
+  require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { desc = "Debug: Set Conditional Breakpoint" })
+
+map("n", "<leader>dr", function()
+  require("dap").repl.open()
+end, { desc = "Debug: Open REPL" })
+
+map("n", "<leader>dl", function()
+  require("dap").run_last()
+end, { desc = "Debug: Run Last" })
+
+map("n", "<leader>dx", function()
+  require("dap").terminate()
+  pcall(function()
+    require("dapui").close()
+  end)
+end, { desc = "Debug: Terminate session" })
+
+map("n", "<leader>du", function()
+  require("dapui").toggle()
+end, { desc = "Debug: Toggle DAP UI" })

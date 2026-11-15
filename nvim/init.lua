@@ -1,3 +1,13 @@
+-- Safely wrap vim.treesitter.start so missing parsers gracefully fall back to syntax highlighting
+local orig_ts_start = vim.treesitter.start
+vim.treesitter.start = function(...)
+  local ok, res = pcall(orig_ts_start, ...)
+  if not ok then
+    return false
+  end
+  return res
+end
+
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = " "
 

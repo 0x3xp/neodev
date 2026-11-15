@@ -95,7 +95,7 @@ curl -fLo /tmp/jb.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/latest
 tar -xf /tmp/jb.tar.xz -C ~/.local/share/fonts/JetBrainsMono
 fc-cache -f ~/.local/share/fonts
 ```
-Set your terminal emulator font to **`JetBrainsMono Nerd Font`**.
+Set your terminal emulator font to **`JetBrainsMono Nerd Font Mono`** (the Mono variant prevents icon clipping in strict monospace terminal grids).
 
 ### 3. Deploy Configuration
 Backup any existing configuration and copy the `nvim` folder into your config directory:

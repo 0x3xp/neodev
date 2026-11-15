@@ -5,6 +5,19 @@ return {
   },
 
   {
+    "nvim-tree/nvim-tree.lua",
+    opts = {
+      renderer = {
+        icons = {
+          padding = {
+            icon = "  ",
+          },
+        },
+      },
+    },
+  },
+
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require "configs.lspconfig"
@@ -49,7 +62,7 @@ return {
     "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     config = function()
-      require("dapui").setup()
+      -- Already configured with custom layouts in configs.dap
     end,
   },
 
